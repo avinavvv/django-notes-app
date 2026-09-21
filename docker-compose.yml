@@ -58,9 +58,9 @@
 
 
 #new addons 
-version: "3.8"
-services: 
-  web: 
-    images: avinavv/notes-app:latest
+services:
+  web:
+    image: avinavv/notes-app:latest
+    container_name: notes_web
     ports:
       - "8000:8000"
