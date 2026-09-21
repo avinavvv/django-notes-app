@@ -34,7 +34,7 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                echo "This is deploying the code"
+                echo "Deployment of code started "
                 sh 'docker compose down --remove-orphans || true'
                 sh 'docker compose up -d --no-build --remove-orphans'
             }
