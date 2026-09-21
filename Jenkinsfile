@@ -1,29 +1,43 @@
-@Library('Shared')_
-pipeline{
-    agent { label 'dev-server'}
+@Library("Shared") _
+pipeline {
     
-    stages{
-        stage("Code clone"){
+    agent { label 'vinod' }
+    
+    stages {
+        stage("Hello"){
             steps{
-                sh "whoami"
-            clone("https://github.com/LondheShubham153/django-notes-app.git","main")
+                script{
+                    hello()
+                }
             }
         }
-        stage("Code Build"){
-            steps{
-            dockerbuild("notes-app","latest")
+        stage("Clone") {
+            steps {
+                script{
+                    gitClone("https://github.com/avinavvv/django-notes-app.git", "main")
+                }
             }
         }
-        stage("Push to DockerHub"){
-            steps{
-                dockerpush("dockerHubCreds","notes-app","latest")
+        stage("Build") {
+            steps {
+                script{
+                    docker_build("notes-app","latest","avinavv")
+                }
             }
         }
-        stage("Deploy"){
-            steps{
-                deploy()
+        stage("Push To DockerHub") {
+            steps {
+                script{
+                    docker_push("notes-app","latest","avinavv")
+                }
             }
         }
-        
+        stage("Deploy") {
+            steps {
+                echo "This is deploying the code"
+                sh 'docker compose down --remove-orphans || true'
+                sh 'docker compose up -d --no-build --remove-orphans'
+            }
+        }
     }
 }
